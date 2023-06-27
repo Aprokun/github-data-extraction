@@ -1,24 +1,21 @@
 from pygit2 import *
 
+from resolvers.CommitResolver import get_commits_data
 
-def get_commits_amount(branch_name: str):
-    commits_count = 0
 
-    if cloned_repo.branches.local.get(branch_name) is not None:
-        for _ in cloned_repo.walk(cloned_repo.branches.local.get(branch_name).target, GIT_SORT_TIME):
-            commits_count += 1
-
-    return commits_count
+def get_repo(author: str, repo_name: str) -> Repository:
+    return clone_repository("https://gitlab.com/" + author + "/" + repo_name + ".git", "/" + author + "_" + repo_name)
 
 
 author = "DanArmor"
 repo_name = "back"
 
-cloned_repo: Repository \
-    = clone_repository("https://gitlab.com/" + author + "/" + repo_name + ".git", "/" + author + "_" + repo_name)
+cloned_repo = get_repo(author, repo_name)
 
-master_count = get_commits_amount("master")
-main_count = get_commits_amount("main")
-develop_count = get_commits_amount("develop")
-
-print(master_count, main_count, develop_count)
+if cloned_repo.branches.get("main") is not None:
+    team_info = get_commits_data("main")
+    print(team_info.commits, team_info.common_commit_amount)
+elif cloned_repo.branches.get("master") is not None:
+    team_info = get_commits_data("master")
+else:
+    print("Нет главной ветки или она называется как хуйня (не main)")
