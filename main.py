@@ -1,44 +1,35 @@
+import sys
+
 from typing import List
 
 from pygit2 import *
 
 from converters.TeamInfoDtoSchema import TeamInfoDtoSchema
-from dtos.HackatonInfoDto import HackatonInfoDto
 from dtos.TeamInfoDto import TeamInfoDto
-from resolvers.CommitResolver import get_commits_data
-from resolvers.LanguagesLocResolver import get_languages_data
+from resolvers.HahatonResolver import get_repo_info, get_hackaton_info_dto
 
 
-def get_repo_info(repo: Repository, repo_path: str, branch_name: str) -> TeamInfoDto:
+def read_urls(file_name: str):
 
-    commits = get_commits_data(repo, branch_name)
-    languages = get_languages_data(repo_path)
+    with open(file_name, "r") as f:
 
-    return TeamInfoDto(commits, languages)
+        urls = f.readlines()
 
-
-def get_hackaton_info_dto(teams: List[TeamInfoDto]) -> HackatonInfoDto:
-    common_commits_count = 0
-    common_loc_count = 0
-
-    for team in teams:
-        common_commits_count += team.commits_count
-        common_loc_count += sum([lang.loc for lang in team.languages])
-
-    return HackatonInfoDto(common_commits_count, common_loc_count, teams)
+        # Чтобы без всяких \n и прочего говна
+        return [url.strip() for url in urls]
 
 
-some_urls = ["https://github.com/DanArmor/RPN_complex_C", "https://gitlab.com/DanArmor/back.git"]
+repo_urls = read_urls(sys.argv[1])
 
 teams: List[TeamInfoDto] = []
 
 num = 0
-for url in some_urls:
+for url in repo_urls:
 
     cloned_repo: Repository = clone_repository(url, "/repo_" + str(num))
     repo_path = cloned_repo.path.replace("/.git/", "")
 
-    # для нумерации папок с репозиториями, возможно нужно поменять на "автор_репозиторий"
+    # для нумерации папок с репозиториями (repo_<num>), возможно нужно поменять на "автор_репозиторий"
     num += 1
 
     if cloned_repo.branches.get("main") is not None:
