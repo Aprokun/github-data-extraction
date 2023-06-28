@@ -3,7 +3,6 @@ import subprocess
 from typing import List, Dict
 
 from dtos.LanguageDto import LanguageDto
-from dtos.LanguagesInfoDto import LanguagesInfoDto
 
 
 def count_languages_lines(repo_path: str):
@@ -15,7 +14,7 @@ def count_languages_lines(repo_path: str):
     return result
 
 
-def get_languages_data(repo_path: str) -> LanguagesInfoDto:
+def get_languages_data(repo_path: str) -> List[LanguageDto]:
 
     languages: List[LanguageDto] = []
 
@@ -23,9 +22,9 @@ def get_languages_data(repo_path: str) -> LanguagesInfoDto:
 
     for key in languages_lines.keys():
 
-        if key == 'header':
+        if key == 'header' or key == 'SUM':
             continue
 
         languages.append(LanguageDto(key, languages_lines[key]['code']))
 
-    return LanguagesInfoDto(languages)
+    return languages

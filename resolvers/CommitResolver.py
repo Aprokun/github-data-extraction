@@ -1,15 +1,13 @@
-import difflib
 from datetime import datetime
 from typing import List, Iterator
 
 from pygit2 import GIT_SORT_TIME, Repository, Oid, Commit, DiffDelta
 
 from dtos.CommitTimeDto import CommitTimeDto
-from dtos.CommitsInfoDto import CommitsInfoDto
-from dtos.TeamInfoDto import TeamInfoDto
 
 
-def get_commits_data(repo: Repository, branch_name: str) -> CommitsInfoDto:
+def get_commits_data(repo: Repository, branch_name: str) -> List[CommitTimeDto]:
+
     commits: List[CommitTimeDto] = []
 
     if repo.branches.local.get(branch_name) is not None:
@@ -17,7 +15,7 @@ def get_commits_data(repo: Repository, branch_name: str) -> CommitsInfoDto:
             commit_info = get_commit_info(repo, commit)
             commits.append(commit_info)
 
-    return CommitsInfoDto(commits)
+    return commits
 
 
 def count_lines(filename):

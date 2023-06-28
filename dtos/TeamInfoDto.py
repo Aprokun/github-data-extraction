@@ -1,9 +1,13 @@
-from dtos.CommitsInfoDto import CommitsInfoDto
-from dtos.LanguagesInfoDto import LanguagesInfoDto
+from typing import List
+
+from dtos.CommitTimeDto import CommitTimeDto
+from dtos.LanguageDto import LanguageDto
 
 
 class TeamInfoDto:
 
-    def __init__(self, commits: CommitsInfoDto, languages: LanguagesInfoDto) -> None:
+    def __init__(self, commits: List[CommitTimeDto], languages: List[LanguageDto]) -> None:
         self.languages = languages
+        self.languages_count = len(languages)
         self.commits = commits
+        self.commits_count = len(commits)
