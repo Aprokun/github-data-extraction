@@ -2,6 +2,8 @@ from typing import List
 
 from pygit2 import *
 
+from converters.TeamInfoDtoSchema import TeamInfoDtoSchema
+from dtos.HackatonInfoDto import HackatonInfoDto
 from dtos.TeamInfoDto import TeamInfoDto
 from resolvers.CommitResolver import get_commits_data
 from resolvers.LanguagesLocResolver import get_languages_data
@@ -15,10 +17,18 @@ def get_repo_info(repo: Repository, repo_path: str, branch_name: str) -> TeamInf
     return TeamInfoDto(commits, languages)
 
 
-some_urls = ["https://github.com/DanArmor/RPN_complex_C", "https://gitlab.com/DanArmor/back.git"]
+def get_hackaton_info_dto(teams: List[TeamInfoDto]) -> HackatonInfoDto:
+    common_commits_count = 0
+    common_loc_count = 0
 
-author = "DanArmor"
-repo_name = "back"
+    for team in teams:
+        common_commits_count += team.commits_count
+        common_loc_count += sum([lang.loc for lang in team.languages])
+
+    return HackatonInfoDto(common_commits_count, common_loc_count, teams)
+
+
+some_urls = ["https://github.com/DanArmor/RPN_complex_C", "https://gitlab.com/DanArmor/back.git"]
 
 teams: List[TeamInfoDto] = []
 
@@ -37,3 +47,11 @@ for url in some_urls:
         teams.append(get_repo_info(cloned_repo, repo_path, "master"))
     else:
         print("Нет главной ветки или она называется как хуйня (как типо main, только не main) - " + cloned_repo.path)
+
+
+hackaton = get_hackaton_info_dto(teams)
+
+team_info_schema = TeamInfoDtoSchema()
+
+for team in teams:
+    print(team_info_schema.dumps(team))
