@@ -1,11 +1,11 @@
 from typing import List
 
-from LanguageDto import LanguageDto
+from LanguagesInfoDto import LanguagesInfoDto
 
 
 class RepoInfoDto:
 
-    def __init__(self, commonCommitAmount: int, commonLineAmount: int, languages: List[LanguageDto]) -> None:
+    def __init__(self, commonCommitAmount: int, commonLineAmount: int, languages: List[LanguagesInfoDto]) -> None:
         self.commonCommitAmount = commonCommitAmount
         self.commonLineAmount = commonLineAmount
         self.languages = languages
