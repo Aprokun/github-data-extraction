@@ -1,3 +1,5 @@
+import os
+
 from typing import List
 
 from pygit2 import Repository, clone_repository
@@ -22,8 +24,8 @@ def get_team_repos_info(repository_urls: List[str]) -> List[RepositoryInfoDto]:
 
     for repo_url in repository_urls:
         repo_name = repo_url.split("/")[-1]
-
-        cloned_repo: Repository = clone_repository(repo_url, "/repo_" + repo_name)
+        
+        cloned_repo: Repository = clone_repository(repo_url, os.path.join(os.getcwd(), "repos", "repo_" + repo_name))
         repo_path: str = cloned_repo.path.replace("/.git/", "")
 
         main_branch_name = "main" if cloned_repo.branches.get("main") else "master"
