@@ -2,7 +2,6 @@ import sys
 from typing import List
 
 from converters.HackatonInfoDtoSchema import HacktonInfoDtoSchema
-from converters.TeamInfoDtoSchemas import TeamInfoDtoSchema
 from dtos.TeamInfoDto import TeamInfoDto
 from dtos.TeamReposDto import TeamReposDto
 from resolvers.HahatonResolver import get_hackaton_info_dto

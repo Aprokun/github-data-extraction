@@ -23,6 +23,10 @@ def get_team_repos_info(repository_urls: List[str]) -> List[RepositoryInfoDto]:
     repos: List[RepositoryInfoDto] = []
 
     for repo_url in repository_urls:
+
+        if "github" not in repo_url and "gitlab" not in repo_url:
+            continue
+
         repo_name = repo_url.split("/")[-1]
         
         cloned_repo: Repository = clone_repository(repo_url, os.path.join(os.getcwd(), "repos", "repo_" + repo_name))

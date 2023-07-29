@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import List, Iterator
+from typing import List
 
-from pygit2 import GIT_SORT_TIME, Repository, Oid, Commit, DiffDelta
+from pygit2 import GIT_SORT_TIME, Repository, Oid, Commit
 
 from dtos.CommitTimeDto import CommitTimeDto
 
